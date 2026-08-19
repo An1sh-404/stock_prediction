@@ -1,0 +1,3 @@
+{
+          "python.defaultInterpreterPath": "${project0_dev}/backend/.venv/bin/activate"
+}
