@@ -1,6 +1,13 @@
-import { useState } from 'react'
 
 import './App.css'
+
+import Header from './components/Header'
+import Main from './components/Main'
+import Features from './components/Features'
+import HowItWorks from './components/Working'
+import Stats from './components/Stats'
+import CTA from './components/CreateAccount'
+import Footer from './components/Footer'
 
 
 function App() {
@@ -9,10 +16,21 @@ function App() {
   return (
     <>
 
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
-        <h1 className="text-4xl font-bold text-white">
-          HAIL DAVID !!!
-        </h1>
+      <div className="min-h-screen bg-slate-950 text-white">
+        <Header />
+        <main>
+          <Main />
+          <Features />
+          <HowItWorks />
+          <Stats />
+          <CTA />
+
+
+
+
+        </main>
+        <Footer />
+
       </div>
 
 
