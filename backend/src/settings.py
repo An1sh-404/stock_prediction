@@ -42,7 +42,12 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'corsheaders',
+    'phonenumber_field',
+    'accounts',
+    'api',
 ]
+
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -88,6 +93,19 @@ DATABASES = {
         'PORT': config('DB_PORT'),
     }
 }
+
+
+AUTH_USER_MODEL = 'accounts.Account'
+
+
+AUTHENTICATION_BACKENDS = [
+    'accounts.backends.EmailOrUsernameModelBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+DEFAULT_FROM_EMAIL = 'noreply@stockprediction.com'
+
 
 
 # Password validation
