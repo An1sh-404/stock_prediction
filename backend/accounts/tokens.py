@@ -42,6 +42,10 @@ class EmailVerificationToken:
                 return None
             user_id = payload.get('user_id')
             user = User.objects.get(id=user_id)
+
+            if user.email_verified:
+                return None
+            
             return user
         
         except (jwt.ExpiredSignatureError, jwt.InvalidTokenError, User.DoesNotExist):

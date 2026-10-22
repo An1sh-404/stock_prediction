@@ -103,8 +103,9 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-DEFAULT_FROM_EMAIL = 'noreply@stockprediction.com'
+
+
+
 
 
 
@@ -153,6 +154,18 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
     ),
+    'DEFAULT_THROTTLE_CLASSES': (
+        'accounts.throttles.BurstRateThrottle',
+        'accounts.throttles.SustainedRateThrottle',
+    ),
+    'DEFAULT_THROTTLE_RATES': {
+        'login': '5/minute',
+        'resend_verification': '5/minute',
+        'verify_email': '5/minute',
+        'registration': '5/minute',
+        'burst': '60/minute',
+        'sustained': '1000/hour',
+    },
 }
 
 
@@ -164,6 +177,7 @@ MAILERS = {
         'BACKEND': 'django.core.mail.backends.console.EmailBackend',
     },
 }
+DEFAULT_FROM_EMAIL = 'noreply@stockprediction.com'
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",

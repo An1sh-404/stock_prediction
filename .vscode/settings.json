@@ -2,5 +2,6 @@
     "workbench.tree.indent": 8,
     "editor.tabSize": 4,
     "python-envs.defaultEnvManager": "ms-python.python:venv",
-    "python.terminal.activateEnvironment": false
+    "python.terminal.activateEnvironment": false,
+    "terminal.integrated.cursorBlinking": true
 }

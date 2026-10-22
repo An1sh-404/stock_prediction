@@ -8,9 +8,6 @@ from django.db.models.functions import Lower
 from .managers import MyAccountManager
 
 
-
-
-
 class Account(AbstractBaseUser, PermissionsMixin):
 	email = models.EmailField(unique=True)              
 	username = models.CharField(max_length=15,
@@ -23,7 +20,7 @@ class Account(AbstractBaseUser, PermissionsMixin):
 								])
 	
 	date_joined = models.DateTimeField(auto_now_add=True)
-	is_active = models.BooleanField(default=False)
+	is_active = models.BooleanField(default=True)
 	is_staff = models.BooleanField(default=False)
 	email_verified = models.BooleanField(default=False)
 

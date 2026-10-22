@@ -1,3 +1,4 @@
+
 from django.contrib.auth.backends import ModelBackend
 from django.contrib.auth import get_user_model
 from django.db.models import Q
@@ -7,8 +8,19 @@ logger = logging.getLogger(__name__)
 
 User = get_user_model()
 
+
+
+class EmailVerificationRequired(Exception):
+	def __init__(self,user):
+		self.user = user
+
+class AccountDisabled(Exception):
+    def __init__(self,user):
+        self.user = user
+
+
 class EmailOrUsernameModelBackend(ModelBackend):
-    def authenticate(self, request, username=None, password=None, **kwargs):
+    def authenticate(self, request=None, username=None, password=None,strict=False, **kwargs):
         if username is None:
             username = kwargs.get(User.USERNAME_FIELD)
 
@@ -26,22 +38,30 @@ class EmailOrUsernameModelBackend(ModelBackend):
             User().set_password(password) # prevent timing attacks/burn comparable CPU time
             return None
         
+        if not user.check_password(password):
+             return None
 
 
-        if user.check_password(password) and self.user_can_authenticate(user):
-            logger.info(f"User {username} authenticated successfully, User_pk={user.pk}")
-            return user
+        if not user.email_verified:
+            if strict:
+                 raise EmailVerificationRequired(user)
+            return None
 
-
-        logger.warning("Failed login attempt")
-        return None
+        if not user.is_active:
+            if strict:
+                   raise AccountDisabled(user)
+            return None
+                        
+        
+        return user
 
 
     def get_user(self, user_id):
         try:
-            user = User.objects.get(pk=user_id)
+            user = User.objects.get(pk=user_id)        
             return user if self.user_can_authenticate(user) else None
-
         except User.DoesNotExist:
             return None
+
+
 
