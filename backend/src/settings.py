@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/6.1/ref/settings/
 
 from pathlib import Path
 from decouple import config
+from datetime import timedelta
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -150,6 +151,7 @@ STATIC_URL = 'static/'
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framwework.authentication.SessionAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
@@ -168,6 +170,10 @@ REST_FRAMEWORK = {
     },
 }
 
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+}
 
 # Email
 # https://docs.djangoproject.com/en/6.1/topics/email/#topic-email-configuration
@@ -178,6 +184,39 @@ MAILERS = {
     },
 }
 DEFAULT_FROM_EMAIL = 'noreply@stockprediction.com'
+
+
+CELERY_BROKER_URL = config('CELERY_BROKER_URL')
+CELERY_RESULT_BACKEND = config('CELERY_RESULT_BACKEND')
+
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'UTC'
+CELERY_ENABLE_UTC = True
+
+CELERY_BEAT_SCHEDULE = {
+    "delete-expired-disabled-accounts" : {
+        "task": "accounts.tasks.delete_expired_disabled_accounts",
+        "schedule": 10,
+    },
+    "delete-unverified-accounts" : {
+        "task": "accounts.tasks.delete_unverified_accounts",
+        "schedule": 10,
+    },
+}
+
+DISABLED_ACCOUNT_RETENTION_DAYS = config(
+    "DISABLED_ACCOUNT_RETENTION_DAYS",
+    default=30,
+    cast=int,
+)
+
+UNVERIFIED_ACCOUNT_EXPIRATION_HOURS = config(
+    "UNVERIFIED_ACCOUNT_EXPIRATION_HOURS",
+    default=24,
+    cast=int,
+)
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",

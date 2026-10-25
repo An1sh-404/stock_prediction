@@ -21,6 +21,7 @@ class Account(AbstractBaseUser, PermissionsMixin):
 	
 	date_joined = models.DateTimeField(auto_now_add=True)
 	is_active = models.BooleanField(default=True)
+	disabled_at = models.DateTimeField(null=True, blank=True, default=None)
 	is_staff = models.BooleanField(default=False)
 	email_verified = models.BooleanField(default=False)
 
