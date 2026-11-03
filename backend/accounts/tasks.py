@@ -8,10 +8,10 @@ from .models import Account
 @shared_task
 def delete_unverified_accounts():
     """
-    Celery task to delete inactive accounts that have not verified their email within 24 hours.
+    Celery task to delete accounts that have not verified their email within 24 hours.
     """
     retention_period = timedelta(hours=
-                                 getattr(settings, 'INACTIVE_ACCOUNT_EXPIRATION_HOURS', 24)
+                                 getattr(settings, 'UNVERIFIED_ACCOUNT_EXPIRATION_HOURS', 24)
                                  )
     expiration_time = timezone.now() - retention_period
     unverified_accounts, _ = Account.objects.filter(email_verified=False,date_joined__isnull=False, date_joined__lt=expiration_time).delete()

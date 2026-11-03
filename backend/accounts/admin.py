@@ -8,9 +8,9 @@ from .models import Account
 class AccountAdmin(admin.ModelAdmin):
     list_display = ('email', 'username', 'is_active', 'is_staff', 'email_verified', 'disabled_at')
     list_filter = ('is_active', 'is_staff', 'email_verified')
-    search_fields = ('email', 'username')
+    search_fields = ('email', 'username','google_sub')
     ordering = ('-date_joined',)
-    readonly_fields = ('date_joined',)
+    readonly_fields = ('date_joined','google_sub')
 
 
     def save_model(self, request, obj, form, change):

@@ -22,6 +22,29 @@ class MyAccountManager(BaseUserManager):
         user.save(using=self._db)
         return user
     
+    def create_google_user(self, email, username, google_sub, **extra_fields):
+
+        if not email:
+            raise ValueError("User must have an email address")
+
+        if not google_sub:
+            raise ValueError("Google subject is required")
+
+        email = self.normalize_email(email).lower()
+        user = self.model(
+            email=email,
+            username=username,
+            google_sub=google_sub,
+            email_verified=True,
+            **extra_fields,
+        )
+        
+        user.set_unusable_password()  # Set an unusable password for Google users
+        user.full_clean()  # Validate the model fields
+        user.save(using=self._db)
+        return user
+    
+    
     def create_superuser(self, email, username, password=None, **extra_fields):
 
         extra_fields.setdefault('is_staff', True)

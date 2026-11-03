@@ -1,15 +1,33 @@
 from django.core.mail import send_mail
+from django.urls import reverse
 from django.conf import settings
-import os
 
-def send_verification_email(user, token):
+from .tokens import EmailVerificationToken
+
+def send_verification_email(user):
     """
     Send a verification email to the user with the provided token.
     """
-    subject = 'Verify your email address'
-    verification_link = f"{settings.FRONTEND_URL}/api/auth/verify-email/?token={token}/"
-    message = f"Hi {user.username},\n\nPlease verify your email address by clicking the link below:\n{verification_link}\n\nIf you did not sign up for this account, please ignore this email.\n\nThank you!"
+    token = EmailVerificationToken.create_token(user)
+
+    subject = 'Verify your email address'    
+    verification_path = reverse("verify-email")
+    verification_link = (
+        f"{settings.BACKEND_URL.rstrip('/')}"
+        f"{verification_path}?token={token}"
+    )
+
+    message = (
+        f"Hi {user.username},\n\n"
+        "Please verify your email address by clicking the link below:\n"
+        f"{verification_link}\n\n"
+        "If you did not sign up for this account, please ignore this email.\n\n"
+        "Thank you!"
+    )
     from_email = settings.DEFAULT_FROM_EMAIL
     recipient_list = [user.email]
+    print(f"Verification link:{verification_link}")
 
     send_mail(subject, message, from_email, recipient_list)
+
+

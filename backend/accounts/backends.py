@@ -20,7 +20,7 @@ class AccountDisabled(Exception):
 
 
 class EmailOrUsernameModelBackend(ModelBackend):
-    def authenticate(self, request=None, username=None, password=None,strict=False, **kwargs):
+    def authenticate(self, username=None, password=None,strict=False, **kwargs):
         if username is None:
             username = kwargs.get(User.USERNAME_FIELD)
 

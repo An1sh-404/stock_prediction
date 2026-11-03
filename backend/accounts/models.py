@@ -24,8 +24,12 @@ class Account(AbstractBaseUser, PermissionsMixin):
 	disabled_at = models.DateTimeField(null=True, blank=True, default=None)
 	is_staff = models.BooleanField(default=False)
 	email_verified = models.BooleanField(default=False)
-
-	
+	google_sub = models.CharField(
+		max_length=255,
+		unique=True,
+		null=True,
+		blank=True,
+	)
 
 	USERNAME_FIELD = 'email'
 	REQUIRED_FIELDS = ['username'] # for super users
