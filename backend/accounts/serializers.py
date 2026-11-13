@@ -2,7 +2,6 @@ from django.db import transaction
 from django.urls import reverse
 from django.contrib.auth import get_user_model,authenticate
 from django.contrib.auth.password_validation import validate_password
-from django.core.exceptions import ValidationError
 from django.conf import settings
 
 from google.auth.transport import requests as google_requests
